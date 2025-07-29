@@ -194,6 +194,18 @@ function validAnagrams(s, t) {
   });
 }
 
+function groupAnagrams(strs) {
+  var response = {};
+
+  for (i = 0; i <strs.length; i++) {
+    response[i] = returnHash(strs[i])
+  }
+
+  return response
+}
+
+console.log(groupAnagrams(["eat","tan", "tea",  "ate", "nat", "bat"]));
+
 // console.log(validAnagrams(txt,tc))
 
 // ========================================================================================
@@ -224,23 +236,23 @@ function twoSum(nums, target) {
  * @param {number} target
  * @return {number[]}
  */
-var twoSum = function(nums, target) {
-    const numMap = new Map(); // Create a new Map to store numbers and their indices
+var twoSum = function (nums, target) {
+  const numMap = new Map(); // Create a new Map to store numbers and their indices
 
-    for (let i = 0; i < nums.length; i++) {
-        const complement = target - nums[i]; // Calculate the complement needed
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i]; // Calculate the complement needed
 
-        // Check if the complement exists in our map
-        if (numMap.has(complement)) {
-            // If it exists, we've found our pair!
-            return [numMap.get(complement), i];
-        }
-
-        // If the complement doesn't exist, add the current number and its index to the map
-        numMap.set(nums[i], i);
+    // Check if the complement exists in our map
+    if (numMap.has(complement)) {
+      // If it exists, we've found our pair!
+      return [numMap.get(complement), i];
     }
 
-    // If no two numbers sum up to the target, you might want to handle this case
-    // (e.g., return an empty array or throw an error, depending on requirements)
-    return [];
+    // If the complement doesn't exist, add the current number and its index to the map
+    numMap.set(nums[i], i);
+  }
+
+  // If no two numbers sum up to the target, you might want to handle this case
+  // (e.g., return an empty array or throw an error, depending on requirements)
+  return [];
 };

@@ -169,12 +169,10 @@ function returnHash(txt) {
   return hash1;
 }
 
-// console.log(Object.keys(hash1));
-
 function validAnagrams(s, t) {
   let initHash = returnHash(s);
   var secHash = returnHash(t);
-  console.log(initHash, secHash);
+  // console.log(initHash, secHash);
   if (Object.keys(initHash).length !== Object.keys(secHash).length) {
     return false;
   }
@@ -182,7 +180,7 @@ function validAnagrams(s, t) {
   var result = [];
   for (var i = 0; i <= Object.keys(initHash).length - 1; i++) {
     if (initHash[keys[i]] === secHash[keys[i]]) {
-      console.log(initHash[keys[i]], secHash[keys[i]]);
+      // console.log(initHash[keys[i]], secHash[keys[i]]);
       result.push(true);
     } else {
       result.push(false);
@@ -194,17 +192,63 @@ function validAnagrams(s, t) {
   });
 }
 
-function groupAnagrams(strs) {
-  var response = {};
+// function groupAnagrams(strs) {
+//   var response = {};
 
-  for (i = 0; i <strs.length; i++) {
-    response[i] = returnHash(strs[i])
+//   for (var i = 0; i < strs.length; i++) {
+//     response[i] = [];
+//     for (var j = 0; j < strs.length; j++) {
+//       if (i == j) {
+//         continue;
+//       } else {
+//         console.log(
+//           validAnagrams(strs[i], strs[j]),
+//           "--------",
+//           strs[i],
+//           strs[j]
+//         );
+//         if (validAnagrams(strs[i], strs[j])) {
+//           response[i].push(strs[i]);
+//           response[i].push(strs[j]);
+//         }
+//       }
+//     }
+//     response[i] = [...new Set(response[i])];
+//   }
+
+//   const seen = new Set();
+//   const result = {};
+
+//   let index = 0;
+
+//   for (const key in response) {
+//     const arr = response[key];
+//     if (arr.length === 0) continue;
+//     const signature = [...arr].sort().join(",");
+
+//     if (!seen.has(signature)) {
+//       seen.add(signature);
+//       result[index++] = arr;
+//     }
+//   }
+
+//   return result;
+// }
+function groupAnagrams(strs) {
+  const map = {};
+
+  for (let word of strs) {
+    const key = word.split("").sort().join("");
+    if (!map[key]) {
+      map[key] = [];
+    }
+    map[key].push(word);
   }
 
-  return response
+  return Object.values(map);
 }
 
-console.log(groupAnagrams(["eat","tan", "tea",  "ate", "nat", "bat"]));
+// console.log(groupAnagrams(["eat", "tan", "tea", "ate", "nat", "bat"]));
 
 // console.log(validAnagrams(txt,tc))
 
@@ -214,6 +258,9 @@ console.log(groupAnagrams(["eat","tan", "tea",  "ate", "nat", "bat"]));
 // Input: nums = [2,7,11,15], target = 9
 // Output: [0,1]
 // Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+
+// TWO SUM
+// ========================================================================================
 
 function twoSum(nums, target) {
   var result = [];
@@ -256,3 +303,96 @@ var twoSum = function (nums, target) {
   // (e.g., return an empty array or throw an error, depending on requirements)
   return [];
 };
+
+// ====================================================================================
+// Top K Frequent Elements
+
+function kelement(nums, k) {
+  var hash = {};
+  nums = nums.sort();
+  for (i = 0; i < nums.length; i++) {
+    if (!hash[nums[i]]) {
+      hash[nums[i]] = 1;
+    } else {
+      hash[nums[i]] += 1;
+    }
+  }
+  const entries = Object.entries(hash);
+  entries.sort((a, b) => b[1] - a[1]);
+  console.log(entries, "----");
+
+  const result = [];
+  for (let i = 0; i < k; i++) {
+    result.push(Number(entries[i][0]));
+  }
+  return result;
+}
+
+var topKFrequent = function (nums, k) {
+  let fs = new Map();
+  for (let n of nums) {
+    let f = (fs.get(n) || 0) + 1;
+    fs.set(n, f);
+  }
+  console.log(fs.entries());
+  let buckets = [];
+  for (let [n, f] of fs.entries()) {
+    buckets[f] = buckets[f] || [];
+    buckets[f].push(n);
+  }
+  console.log(buckets);
+  let res = [];
+  for (let i = buckets.length - 1; i >= 0; i--) {
+    if (res.length >= k) return res;
+
+    if (buckets[i] && buckets.length) {
+      res = res.concat(buckets[i]);
+    }
+  }
+
+  return res;
+};
+
+// console.log(topKFrequent([4, 1, -1, 2, -1, 2, 3], 2));
+
+// var productExceptSelf = function(nums) {
+//     let result = []
+//     for(var i=0;i<nums.length;i++){
+//       result[i] = 1
+//       for(var j=0;j<nums.length;j++){
+//         if(i==j){
+//           continue
+//         }
+//         else{
+//           result[i]*=nums[j]
+//         }
+//       }
+
+//     }
+//     return result
+// };
+
+var productExceptSelf = function(nums) {
+    let n = nums.length;
+    let result = Array(n).fill(1);
+    
+    let prefix = 1;
+    for (let i = 0; i < n; i++) {
+        result[i] = prefix;
+        prefix *= nums[i];
+
+        console.log(i , result[i] , prefix , "--------PREFIX")
+    }
+
+    let suffix = 1;
+    for (let i = n - 1; i >= 0; i--) {
+        result[i] *= suffix;
+        suffix *= nums[i];
+        console.log(i , result[i] , suffix , "--------suffix")
+
+    }
+
+    return result;
+};
+
+console.log(productExceptSelf([1,2,3,4]))
